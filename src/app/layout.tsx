@@ -1,4 +1,6 @@
-import type { Metadata } from "next";
+// 移除 'use client' 指令
+import { Metadata } from "next";
+import Providers from "@/components/Providers";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -20,15 +22,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+    <html lang="zh">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

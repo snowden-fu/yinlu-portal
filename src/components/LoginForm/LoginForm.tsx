@@ -23,12 +23,16 @@ export default function LoginForm() {
         redirect: false
       });
 
+      console.log('Sign in result:', result);
+
       if (result?.error) {
         setError('用户名或密码错误');
       } else {
+        console.log('Redirecting to dashboard...');
         router.push('/dashboard');
       }
     } catch (err) {
+      console.error('Login error:', err);
       setError('登录过程中出现错误');
     } finally {
       setLoading(false);

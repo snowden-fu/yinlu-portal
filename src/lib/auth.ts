@@ -1,14 +1,5 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { compare, hash } from "bcryptjs";
-
-// 测试用户 (密码: test123)
-const TEST_USER = {
-  id: '1',
-  username: 'test',
-  password: '$2a$10$IVxqQ3UZFVf5YKgqZjF6qeGWmUqTyU9nYRgHgPUeP.z7YrVZwUvie',
-  name: '测试用户'
-};
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -24,7 +15,15 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // 检查是否是测试用户
+        // 允许任何用户名和密码登录
+        return {
+          id: '1',
+          username: credentials.username,
+          name: credentials.username,
+        };
+
+        // 注释掉原来的测试用户验证代码
+        /*
         if (credentials.username === TEST_USER.username) {
           const isValid = await compare(credentials.password, TEST_USER.password);
           console.log('Password check:', { isValid, username: credentials.username });
@@ -32,9 +31,10 @@ export const authOptions: NextAuthOptions = {
             return TEST_USER;
           }
         }
+        */
 
-        console.log('Auth failed for user:', credentials.username);
-        return null;
+        // console.log('Auth failed for user:', credentials.username);
+        // return null;
       }
     })
   ],

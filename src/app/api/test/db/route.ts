@@ -3,9 +3,8 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    // 使用健康检查来测试连接
     const { data, error } = await supabase.auth.getSession();
-
+    console.log(data)
     if (error) {
       console.error('Supabase error:', error);
       return NextResponse.json(

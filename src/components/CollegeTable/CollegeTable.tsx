@@ -1,6 +1,5 @@
 "use client";
 
-import { supabase } from "@/lib/supabase";
 import {
   createColumnHelper,
   flexRender,
@@ -21,8 +20,8 @@ const columnHelper = createColumnHelper<College>();
 
 export default function CollegeTable() {
   const [globalFilter, setGlobalFilter] = useState("");
-  const [data, setData] = useState<College[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [data, ] = useState<College[]>([]);
+  const [loading, ] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -51,7 +50,7 @@ export default function CollegeTable() {
   );
 
   const handleAddFavorite = async (college: College) => {
-    // TODO: 实现添加收藏功能
+    console.log("add "+college)
   };
 
   const table = useReactTable({

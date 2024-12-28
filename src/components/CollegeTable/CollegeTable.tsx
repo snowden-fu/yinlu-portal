@@ -1,57 +1,43 @@
-'use client';
+"use client";
 
-import { useState, useMemo } from 'react';
+import { supabase } from "@/lib/supabase";
 import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
   createColumnHelper,
   flexRender,
-} from '@tanstack/react-table';
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useMemo, useState } from "react";
 
 type College = {
-  id: string;
-  name: string;
-  location: string;
-  type: string;
-  minScore: number;
-  maxScore: number;
-  programs: string[];
+  id: number;
+  year: number;
+  source_region: string;
 };
 
 const columnHelper = createColumnHelper<College>();
 
 export default function CollegeTable() {
-  const [sorting, setSorting] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState('');
+  const [globalFilter, setGlobalFilter] = useState("");
+  const [data, setData] = useState<College[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('name', {
-        header: '学校名称',
-        cell: info => info.getValue(),
+      columnHelper.accessor("year", {
+        header: "年份",
+        cell: (info) => info.getValue(),
       }),
-      columnHelper.accessor('location', {
-        header: '所在地',
-        cell: info => info.getValue(),
-      }),
-      columnHelper.accessor('type', {
-        header: '类型',
-        cell: info => info.getValue(),
-      }),
-      columnHelper.accessor('minScore', {
-        header: '最低分',
-        cell: info => info.getValue(),
-      }),
-      columnHelper.accessor('maxScore', {
-        header: '最高分',
-        cell: info => info.getValue(),
+      columnHelper.accessor("source_region", {
+        header: "来源区域",
+        cell: (info) => info.getValue(),
       }),
       columnHelper.display({
-        id: 'actions',
-        header: '操作',
-        cell: props => (
+        id: "actions",
+        header: "操作",
+        cell: (props) => (
           <button
             onClick={() => handleAddFavorite(props.row.original)}
             className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
@@ -68,38 +54,37 @@ export default function CollegeTable() {
     // TODO: 实现添加收藏功能
   };
 
-  // 模拟数据，实际应该从API获取
-  const data = useMemo(() => [], []);
-
   const table = useReactTable({
     data,
     columns,
     state: {
-      sorting,
       globalFilter,
     },
-    onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
 
+  if (loading) {
+    return <div className="text-center py-4">加载中...</div>;
+  }
+
   return (
     <div className="space-y-4">
       <input
         type="text"
         value={globalFilter}
-        onChange={e => setGlobalFilter(e.target.value)}
+        onChange={(e) => setGlobalFilter(e.target.value)}
         placeholder="搜索..."
         className="p-2 border rounded w-full max-w-md"
       />
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white shadow-sm rounded-lg">
           <thead className="bg-gray-50">
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
+                {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
                     className="px-6 py-3 text-left text-sm font-semibold text-gray-600"
@@ -114,9 +99,9 @@ export default function CollegeTable() {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map(row => (
+            {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="border-t">
-                {row.getVisibleCells().map(cell => (
+                {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="px-6 py-4 text-sm">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

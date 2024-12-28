@@ -1,11 +1,9 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import CollegeTable from '@/components/CollegeTable';
 import Header from '@/components/Header';
-import  CollegeTable from '@/components/CollegeTable';
 
 export default function Dashboard() {
-  const { data: session } = useSession();
 
   return (
     <div className="min-h-screen bg-gray-50">

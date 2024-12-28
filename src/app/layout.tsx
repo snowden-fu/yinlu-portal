@@ -1,4 +1,3 @@
-// 移除 'use client' 指令
 import { Metadata } from "next";
 import Providers from "@/components/Providers";
 import localFont from "next/font/local";
